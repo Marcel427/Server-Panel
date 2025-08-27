@@ -1,68 +1,25 @@
-# Server Panel
+# ServerPanel demo
 
-**Version:** 1.0.0  
-**Author:** Kenshi9999
+This repository contains a small frontend demo (index.html, style.css, script.js) and a tiny Node/Express server in `src/server.js`.
 
-A web-based server management panel with file management, editor, and settings.
+Quick start (Windows PowerShell):
 
----
+1. Install dependencies:
 
-## Tabs
+```powershell
+npm install
+```
 
-### 1. File Management
+2. Start the server:
 
-**Description:** Browse, create, rename, delete, upload, and download files and folders in your server.
+```powershell
+npm start
+```
 
-**Features:**
-- File browser with folder navigation
-- Create new files or folders
-- Rename or delete files/folders
-- Upload files to current directory
-- Search functionality for files and folders
-- Three-dot context menu for file actions
+3. Open http://localhost:3000 in your browser.
 
-**Usage:**
-- Click a folder to navigate into it
-- Click a file to open it in the editor
-- Use the context menu (⋮) for options like Edit, Download, Delete, Rename
-- Use the Upload button to add new files to the current directory
-
----
-
-### 2. File Editor
-
-**Description:** Edit files directly in the browser with live save options.
-
-**Features:**
-- In-page text editor for files
-- Supports syntax highlighting
-- Save changes instantly
-- Dark/light theme support
-- Toast notifications for save status or errors
-
-**Usage:**
-- Click on a file to open it in the editor
-- Make changes in the textarea
-- Click **Save** to write changes to the server
-- Close the editor with the ✖ button
-
----
-
-### 3. Settings
-
-**Description:** Configure server panel options, PM2 integration, theme, and start folder.
-
-**Features:**
-- Instantly save configuration changes
-- Toggle Dark/Light theme
-- Enable or disable PM2 process management
-- Set default folder for file operations
-- Max activity events configuration
-
-**Usage:**
-- Navigate to the **Settings** tab
-- Change any value and it is saved automatically
-- Theme and PM2 toggle buttons save instantly
-- Max activity and start folder updates are saved to `config.json`
-
----
+What it provides:
+- Serves the UI at `/`.
+- `/api/metrics` returns basic metrics.
+- `/api/activity` returns recent activity.
+- `POST /api/features` accepts feature selections.

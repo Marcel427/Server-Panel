@@ -1,0 +1,18 @@
+{
+  "users": [
+    {
+      "username": "admin",
+      "password": "$2a$10$lN7o/CtXcDeA5XGTadMfF.e3dJqo4KFlEixC0AEy8.0IpzwO3rXEC",
+      "role": "admin",
+      "displayName": "Administrator"
+    }
+  ],
+  "features": [
+    "monitoring"
+  ],
+  "activity": [],
+  "monitoredProcesses": [],
+  "alerts": [],
+  "tokens": {},
+  "audit": []
+}

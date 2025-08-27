@@ -1,0 +1,10 @@
+{
+  "features": [
+    "monitoring"
+  ],
+  "pm2": {
+    "enabled": false
+  },
+  "maxActivity": 7,
+  "startFolder": ""
+}

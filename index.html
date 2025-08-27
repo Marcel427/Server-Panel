@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Server Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <meta name="description" content="Animated server dashboard with login and feature setup" />
+</head>
+<body>
+    <div class="bg-anim" aria-hidden="true">
+        <div class="shape s1"></div>
+        <div class="shape s2"></div>
+        <div class="shape s3"></div>
+    </div>
+
+    <main class="app">
+        <section class="login-screen" id="loginScreen">
+            <div class="login-card">
+                <h1 class="brand">Server Panel</h1>
+                <p class="lead">Fast, simple monitoring and management</p>
+                <form id="loginForm" class="login-form" autocomplete="on">
+                    <label>
+                        <span>Username</span>
+                        <input type="text" name="username" id="username" required autocomplete="username" />
+                    </label>
+                    <label>
+                        <span>Password</span>
+                        <input type="password" name="password" id="password" required autocomplete="current-password" />
+                    </label>
+                    <div class="row">
+                        <label class="checkbox"><input type="checkbox" id="remember">Remember</label>
+                        <button class="btn primary" type="submit">Sign in</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <section class="dashboard hidden" id="dashboard">
+            <aside class="sidebar">
+                <div class="sidetop">
+                    <h2>Server Panel</h2>
+                </div>
+                <nav>
+                    <ul>
+                        <li class="active" data-tab="overview">Overview</li>
+                        <li data-tab="help">Help</li>
+                        <li data-tab="metrics">Metrics</li>
+                        <li data-tab="notifications">Notifications</li>
+                        <li data-tab="users">Users</li>
+                        <li data-tab="file">Files</li>
+                        <li data-tab="processes">Process Management</li>
+                        <li data-tab="audit" class="hidden">Audit</li>
+                        <li data-tab="settings">Settings</li>
+                        <li data-tab="credits">Credits</li>
+                    </ul>
+                </nav>
+            </aside>
+            <section class="main">
+                <header class="topbar">
+                    <div class="left">
+                        <h3>Overview</h3>
+                    </div>
+                    <div class="right">
+                        <div class="profile" id="profileDisplay">Not signed in</div>
+                        <button class="btn" id="logoutBtn">Logout</button>
+                    </div>
+                </header>
+                    <div class="content">
+                        <div class="tab" id="tab-overview">
+                            <div class="overview-layout">
+                                <div class="overview-left">
+                                    <section class="cards">
+                                        <div class="card stat">
+                                            <div class="title">CPU</div>
+                                            <div class="value" id="cpuVal">--%</div>
+                                        </div>
+                                        <div class="card stat">
+                                            <div class="title">Memory</div>
+                                            <div class="value" id="memVal">--%</div>
+                                        </div>
+                                        <div class="card stat">
+                                            <div class="title">Uptime</div>
+                                            <div class="value" id="uptimeVal">--</div>
+                                        </div>
+                                        <div class="card stat">
+                                            <div class="title">Disk</div>
+                                            <div class="value"><span id="diskVal">--</span>
+                                                <div class="disk-bar" style="width:140px;margin-left:12px"><div id="diskBar" style="width:0%"></div></div>
+                                            </div>
+                                        </div>
+                                    </section>
+                                        <!-- Metrics removed from Overview: metrics are now available in the Metrics tab -->
+                                </div>
+                            </div>
+                                <!-- Recent Activity moved to the bottom of the Overview for full-width display -->                                <section class="panel activity" id="overviewRecents">
+                                <h4>Recent Activity</h4>
+                                <ul id="activityList">
+                                <li>Loading activity...</li>
+                                </ul>
+                            </section>
+                            </div>
+                            <div class="tab hidden" id="tab-metrics">
+                                <h4>Metrics</h4>
+                                <div id="metricsDetails">Loading metrics...</div>
+                            </div>
+                            <div class="tab hidden" id="tab-file">
+                                <h4>File Management</h4>
+                                <button id="refreshFiles" type="button" class="btn">Refresh</button>
+                                <button id="backBtn" class="btn hidden">⬅ Back</button>
+                                <button id="newFileBtn" type="button" class="btn">+ New File</button>
+                                <button id="newFolderBtn" type="button" class="btn">+ New Folder</button>
+                                <button id="uploadFileBtn" type="button" class="btn">⬆ Upload File</button>
+                                <div id="fileSearchWrapper" style="margin-bottom:10px;">
+                                    <input id="fileSearch" type="text" placeholder="Search files...">
+                                </div>
+                                <div id="filesArea"><p>Loading files...</p></div>
+                            </div>
+                            <div id="editorModal" class="modal hidden">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                <span id="editorFilename"></span>
+                                <button id="editorClose" class="btn">✖</button>
+                                </div>
+                                <textarea id="editorTextarea"></textarea>
+                                <div class="modal-footer">
+                                <button id="editorSave" class="btn">Save</button>
+                                </div>
+                            </div>
+                            </div>
+                            <div class="tab hidden" id="tab-users">
+                                <h4>Users</h4>
+                                <div id="usersArea"><p>Loading users...</p></div>
+                                <!-- user modal -->
+                                <div id="userModal" class="modal hidden" role="dialog" aria-modal="true">
+                                    <div class="modal-backdrop"></div>
+                                    <div class="modal-card">
+                                        <h3 id="modalTitle">User</h3>
+                                        <form id="userForm">
+                                            <label>Username<br/><input id="modalUsername" required /></label>
+                                            <label>Password<br/><input id="modalPassword" type="password" /></label>
+                                            <label>Role<br/>
+                                                <select id="modalRole">
+                                                    <option value="user">user</option>
+                                                    <option value="admin">admin</option>
+                                                </select>
+                                            </label>
+                                            <div class="row" style="margin-top:12px">
+                                                <button type="button" id="modalCancel" class="btn">Cancel</button>
+                                                <button type="submit" class="btn primary">Save</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab hidden" id="tab-help">
+                                <p><Strong>Overview:</Strong> Shows a little bit of server information like:<br>CPU Usage, Memory Usage, Uptime, Disk Ussage and Recent Activity</p>
+                                <p><Strong>Metrics:</Strong> Shows metrics about the memory and cpu usage</p>
+                                <p><Strong>Notifications:</Strong> Shows recent notifications and alerts about the system</p>
+                                <p><Strong>Users:</Strong> Shows all users in the database and their status</p>
+                                <p><Strong>Process Management:</Strong> Shows all running processes on the server (only pm2 right now)</p>
+                                <p><Strong>Audit:</Strong> Shows all audit logs and changes made to the system</p>
+                                <p><Strong>Settings:</Strong> a simple settings task to handle more about the panel</p>
+                            </div>
+
+                            <div class="tab hidden" id="tab-credits">
+                                This panel is powered by contributions from the following:
+                                <p>
+                                    <strong>Development & Maintenance</strong><br>
+                                    Cordinal Services Team
+                                </p>
+                                <p>
+                                    <strong>Open-Source Projects Used</strong>
+                                        <br>cors
+                                        <br>express
+                                        <br>node-os-utils
+                                        <br>pm2
+                                        <br>socket.io
+                                        <br>bcryptjs
+                                </p>
+                            </div>
+
+                            <div class="tab hidden" id="tab-notifications">
+                                <div style="display:flex;justify-content:space-between;align-items:center"><h4>Notifications</h4><button id="refreshNotifications" class="btn">Refresh</button></div>
+                                <div id="notificationsArea">Loading notifications...</div>
+                            </div>
+
+                                <div class="tab hidden" id="tab-audit">
+                                <div style="display:flex;justify-content:space-between;align-items:center">
+                                    <h4>Audit Log (admins)</h4>
+                                    <div>
+                                        <button id="refreshAudit" class="btn">Refresh</button>
+                                        <button id="exportAudit" class="btn">Export CSV</button>
+                                    </div>
+                                </div>
+                                <div class="audit-filters" style="margin:10px 0;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+                                    <input id="auditFilterActor" placeholder="Actor" style="padding:8px;border-radius:6px" />
+                                    <input id="auditFilterAction" placeholder="Action contains" style="padding:8px;border-radius:6px" />
+                                    <label style="font-size:12px;color:var(--muted)">From <input id="auditFilterFrom" type="date" style="margin-left:6px;padding:6px;border-radius:6px" /></label>
+                                    <label style="font-size:12px;color:var(--muted)">To <input id="auditFilterTo" type="date" style="margin-left:6px;padding:6px;border-radius:6px" /></label>
+                                    <button id="auditApplyFilters" class="btn">Apply</button>
+                                    <button id="auditClearFilters" class="btn">Clear</button>
+                                    <div style="display:flex;gap:6px;align-items:center">
+                                        <button id="preset24h" class="btn">Last 24h</button>
+                                        <button id="preset7d" class="btn">Last 7d</button>
+                                        <button id="preset30d" class="btn">Last 30d</button>
+                                    </div>
+                                    <div style="display:flex;align-items:center;gap:8px;margin-left:8px">
+                                        <label class="checkbox"><input type="checkbox" id="liveTailToggle" /> Live tail</label>
+                                    </div>
+                                    <div id="auditPager" style="margin-left:auto;display:flex;align-items:center;gap:8px">
+                                        <button id="auditPrev" class="btn">Prev</button>
+                                        <span id="auditPageInfo" style="color:var(--muted)">0-0 of 0</span>
+                                        <button id="auditNext" class="btn">Next</button>
+                                        <select id="auditPageSize" style="padding:6px;border-radius:6px">
+                                            <option value="20">20</option>
+                                            <option value="50" selected>50</option>
+                                            <option value="100">100</option>
+                                        </select>
+                                    </div>
+                                    <div id="auditLastUpdated" style="margin-left:12px;color:var(--muted);font-size:13px"></div>
+                                </div>
+                                <div id="auditArea"><p class="muted">Audit requires admin access.</p></div>
+                            </div>
+
+                            <!-- Export confirmation modal -->
+                            <div id="exportModal" class="modal hidden" role="dialog" aria-modal="true">
+                                <div class="modal-backdrop"></div>
+                                <div class="modal-card">
+                                    <h3 id="exportModalTitle">Export Audit</h3>
+                                    <p id="exportModalBody">Preparing export...</p>
+                                    <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:12px">
+                                        <button id="exportCancel" class="btn">Cancel</button>
+                                        <button id="exportPageBtn" class="btn">Export page</button>
+                                        <button id="exportAllBtn" class="btn primary">Export all</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab hidden" id="tab-processes">
+                                <h4>Process Management (PM2)</h4>
+                                <div id="processList">No processes loaded.</div>
+                            </div>
+                            <div class="tab hidden" id="tab-settings">
+                                <h4>Settings</h4>
+                                <div class="settings-shell">
+                                    <aside class="settings-sidebar">
+                                        <ul>
+                                            <li class="active" data-section="general">General</li>
+                                            <li data-section="appearance">Appearance</li>
+                                            <li data-section="integrations">Integrations</li>
+                                        </ul>
+                                    </aside>
+                                    <div class="settings-content">
+                                        <div class="settings-panel" data-section="general">
+                                            <div class="settings-row">
+                                                <div>
+                                                    <div style="font-weight:700">Max activity</div>
+                                                    <div style="color:var(--muted);font-size:13px">Number of recent events shown in Overview</div>
+                                                </div>
+                                                <div><input type="number" id="maxActivity" min="1" max="100" style="width:80px" /></div>
+                                            </div>
+                                            <div class="settings-row">
+                                                <div><div style="font-weight:700">Enable PM2</div><div style="color:var(--muted);font-size:13px">Allow PM2 process management</div></div>
+                                                <div><div id="pm2Toggle" class="toggle"><div class="knob"></div></div></div>
+                                            </div>
+                                        </div>
+
+                                        <div class="settings-panel hidden" data-section="appearance">
+                                            <div class="settings-row">
+                                                <div><div style="font-weight:700">Theme</div><div style="color:var(--muted);font-size:13px">Light / Dark mode</div></div>
+                                                <div><button id="themeToggle" class="btn">Toggle</button></div>
+                                            </div>
+                                        </div>
+
+                                        <div class="settings-panel hidden" data-section="integrations">
+                                            <div class="settings-row">
+                                                <div><div style="font-weight:700">File start folder</div><div style="color:var(--muted);font-size:13px">Set the folder to start file operations</div></div>
+                                                <div><label class="input"><input type="input" id="startFolder" /><button class="btn" id="saveStartFolder">Save</button></label></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <section class="panel setup hidden" id="setupPanel">
+                                <h4>Choose initial functionality</h4>
+                                <form id="featureForm">
+                                    <label><input type="checkbox" name="features" value="monitoring" checked /> Monitoring</label>
+                                    <label><input type="checkbox" name="features" value="alerts" /> Alerts & Notifications</label>
+                                    <label><input type="checkbox" name="features" value="backups" /> Automated Backups</label>
+                                    <label><input type="checkbox" name="features" value="users" /> User Management</label>
+                                    <div class="row">
+                                        <button class="btn" type="button" id="skipSetup">Skip</button>
+                                        <button class="btn primary" type="submit">Save features</button>
+                                    </div>
+                                </form>
+                            </section>
+                        </div>
+            </section>
+        </section>
+    </main>
+
+    <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

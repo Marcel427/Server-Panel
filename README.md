@@ -18,8 +18,23 @@ npm start
 
 3. Open http://localhost:3000 in your browser.
 
-What it provides:
-- Serves the UI at `/`.
-- `/api/metrics` returns basic metrics.
-- `/api/activity` returns recent activity.
-- `POST /api/features` accepts feature selections.
+All Api Endpoints
+
+| Method | Endpoint            | Description                                            |
+| ------ | ------------------- | ------------------------------------------------------ |
+| GET    | /api/files          | List files in a directory (`query: path`)              |
+| POST   | /api/files/create   | Create new file or folder (`body: { path, type }`)     |
+| POST   | /api/files/rename   | Rename a file or folder (`body: { oldPath, newPath }`) |
+| POST   | /api/files/delete   | Delete a file or folder (`body: { path }`)             |
+| GET    | /api/files/download | Download a file (`query: path`)                        |
+| GET    | /api/files/read     | Read file content (`query: path`)                      |
+| POST   | /api/files/write    | Write file content (`body: { path, content }`)         |
+
+Api config call
+
+| Method | Endpoint    | Description                                                   |
+| ------ | ----------- | ------------------------------------------------------------- |
+| POST   | /api/config | Update configuration (`body: JSON object of config settings`) |
+
+
+

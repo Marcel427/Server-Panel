@@ -1,8 +1,7 @@
 # Server Panel
 
 **Version:** 1.0.0  
-**Author:** Your Name  
-**License:** MIT  
+**Author:** Kenshi9999
 
 A web-based server management panel with file management, editor, and settings.
 
